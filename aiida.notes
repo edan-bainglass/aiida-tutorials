@@ -1,0 +1,67 @@
+Installation:
+
+- make sure to use the correct pip in venv
+
+General Questions:
+
+- how do profiles work?
+- caching?
+
+Tutorials:
+
+- Aiida tutorials readthedocs:
+  - Basic:
+    ! Issues:
+      - `verdi process list -a` does not show finished processes
+        - seems to only be an issue from Jupyter
+      - provenance graph not correct
+        - even in pdf, graph appears different (uuif instead of pk?)
+    # Questions
+      - is it not possible to change computer setup? If so, is this because the node is immutable?
+  - Running processes:
+    ! Issues:
+      - pw calculation finishes with error code 305
+        - Intel environment variables not loading correctly (discuss in group)
+    # Important
+      - `parent_folder` concept - avoids large file transfer to local while preserving provenance
+        - why do we need to do this if the restart builder was generated from the original calculation node?
+    # Questions
+      - why does `builder.pseudos` not show the actual pseudo used?
+
+Topics:
+
+- Processes:
+  - Concepts:
+  - Usage:
+    ! Issues:
+      - Missing `code` argument in code snippets (only mentioned as a footnote)
+  - Process functions:
+    ! Typos:
+      - "calcfunction() decorator"
+      - "plain_function"
+      - "with more positional arguments that explicitly named in the signature, will raise a TypeError"
+      - "Even though for both cases there can no be guarantee of reproducibility"
+    ! Issues:
+      - Variable arguments example yields "variadic arguments are not supported"
+        - New to version 2.3, but updating aiida-core yields version 2.2
+    # Important
+      - "just as with python functions, one should only use immutable objects as function defaults because mutable objects can give unexpected results as they will be kept between function calls. Therefore, in order to use a default value for process functions, simply use None as the default value and check for its presence in the function body settings the default value if it is None."
+
+- Calculations:
+  - Concepts:
+    ! Typos:
+      - "calcfunction()"
+      - "that transforms a regular python function in a calculation process"
+      - "echo $(( $x + $y ))"
+      - "C:sub:`1`"
+  - Usage:
+    # Unclear
+      - local file copy strategy (data duplication in data nodes?)
+
+
+Possible work:
+
+- Improve foreign key violation error
+- Automatic deduplication of stored process function source files
+- Configurable exponential backoff mechanism
+- Additional file stashing methods
