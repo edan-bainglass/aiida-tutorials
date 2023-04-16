@@ -2,10 +2,13 @@ Installation:
 
 - make sure to use the correct pip in venv
 
-General Questions:
+General:
 
 - how do profiles work?
 - caching?
+
+! Issues:
+  - `sqlalchemy` version mismatch
 
 Tutorials:
 
@@ -27,6 +30,14 @@ Tutorials:
         - why do we need to do this if the restart builder was generated from the original calculation node?
     # Questions
       - why does `builder.pseudos` not show the actual pseudo used?
+  - Writing workflows:
+    ! Issues:
+      - `get_aiida_structure()` taking way too long!
+    # Suggestions
+      - "Submitting calculation jobs"
+        - 7th paragraph ("Since the result...") - consider enhancing this paragraph with more information on what AiiDA is actually doing
+    # Important
+      - When submitting workchains, make sure to add the `<WorkChain>.py` file to the `PYTHONPATH`
 
 Topics:
 
