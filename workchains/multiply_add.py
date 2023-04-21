@@ -1,12 +1,9 @@
-from aiida.engine import WorkChain, calcfunction
-from aiida.orm import Int
+from aiida.engine import ToContext, WorkChain, calcfunction
+from aiida.orm import Code, Int
+from aiida.plugins.factories import CalculationFactory
 from plumpy import WorkChainSpec
 
-
-@calcfunction
-def addition(x: Int, y: Int) -> Int:
-    """Return the sum node of two integer nodes."""
-    return x + y
+ArithmeticAddCalculation = CalculationFactory("core.arithmetic.add")
 
 
 @calcfunction
@@ -23,9 +20,11 @@ class MultiplyAddWorkChain(WorkChain):
         """Specify inputs, outputs, and the workchain outline."""
         super().define(spec)
 
+        spec.input("code", valid_type=Code)
         spec.input("x", valid_type=Int)
         spec.input("y", valid_type=Int)
         spec.input("z", valid_type=Int)
+
         spec.output("product", valid_type=Int)
         spec.output("sum", valid_type=Int)
 
@@ -44,12 +43,20 @@ class MultiplyAddWorkChain(WorkChain):
 
     def add(self) -> None:
         """Add z to the product of x and y."""
-        self.ctx.sum = addition(
-            self.ctx.product,
-            self.inputs.z,
+        inputs = {
+            "code": self.inputs.code,
+            "x": self.ctx.product,
+            "y": self.inputs.z,
+        }
+
+        add_calc_job = self.submit(
+            ArithmeticAddCalculation,
+            **inputs,
         )
+
+        return ToContext(add_node=add_calc_job)
 
     def result(self) -> None:
         """Parse the result."""
         self.out("product", self.ctx.product)
-        self.out("sum", self.ctx.sum)
+        self.out("sum", self.ctx.add_node.outputs.sum)
