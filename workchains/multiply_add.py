@@ -1,5 +1,5 @@
 from aiida.engine import ToContext, WorkChain, calcfunction
-from aiida.orm import Code, Int
+from aiida.orm import Code, Float, Int
 from aiida.plugins.factories import CalculationFactory
 from plumpy import WorkChainSpec
 
@@ -12,6 +12,18 @@ def multiplication(x: Int, y: Int) -> Int:
     return x * y
 
 
+def z_non_zero(node, _):
+    """Check that `z` is non-zero."""
+    if node.value == 0:
+        return "the `z` input must not be zero."
+
+
+def sum_xy_non_zero(inputs, _):
+    """Check that the `sum` is non-zero."""
+    if inputs["x"].value + inputs["y"].value == 0:
+        return "the sum of `x` and `y` must not be zero."
+
+
 class MultiplyAddWorkChain(WorkChain):
     """Workchain to multiply two integers and add a third."""
 
@@ -21,9 +33,10 @@ class MultiplyAddWorkChain(WorkChain):
         super().define(spec)
 
         spec.input("code", valid_type=Code)
-        spec.input("x", valid_type=Int)
-        spec.input("y", valid_type=Int)
-        spec.input("z", valid_type=Int)
+        spec.input("x", valid_type=(Int, Float))
+        spec.input("y", valid_type=(Int, Float))
+        spec.input("z", valid_type=Int, validator=z_non_zero)
+        spec.inputs.validator = sum_xy_non_zero
 
         spec.output("product", valid_type=Int)
         spec.output("sum", valid_type=Int)
