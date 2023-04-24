@@ -36,6 +36,8 @@ Tutorials:
     # Suggestions
       - "Submitting calculation jobs"
         - 7th paragraph ("Since the result...") - consider enhancing this paragraph with more information on what AiiDA is actually doing
+      - Automate `BaseRestartWorkChain` subclass' `setup` method
+      - `Exposing inputs and outputs` was already discussed prior to `Dealing with Errors` - remove redundant section and link to previous mention
     # Important
       - When submitting workchains, make sure to add the `<WorkChain>.py` file to the `PYTHONPATH`
       ! when changing a process that was once submitted to the daemon (cached endpoint), restart(+reset?) the daemon to reflect the change
